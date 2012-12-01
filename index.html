@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Bertrand</title>
+
+
+	<link href="js/libs/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+	<link href="styles.css" rel="Stylesheet" type="text/css">
+	
+	<script type="text/javascript" src="js/libs/jquery/jquery.js"></script>
+	<script type="text/javascript" src="js/libs/bootstrap/js/bootstrap.js"></script>
+	<script data-main="js/main" type="text/javascript" src="js/libs/require/require.js"></script>
+	
+	
+     <style type="text/css" media="screen">
+            .slides_container_xxx {
+            	width: 570px;
+                height:270px;
+            }
+            .slides_container_xxx>div {
+            	width: 570px;
+                height:270px;
+                display:block; 
+                
+                padding-top: 	5px;
+                padding-bottom: 5px;
+                padding-left: 	5px;
+                padding-right: 	5px;
+            }
+        </style>	
+	
+</head>
+<body>
+	<div class="container-fluid">
+		<div class="row-fluid">
+			<div class="span12">
+				<div class="navbar">
+	  				<div class="navbar-inner">		
+						<h1>Bertrand.exe<br><small><i>da solva</i></small></h1>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="row-fluid">
+  			<div class="span3" id="containerToolbar">
+				<div class="row-fluid">
+					<a class="btn span12" href="#" id="btnComputeAsync"><i class="icon-play-circle"></i> Solve problem</a>
+				</div>			
+				<div class="row-fluid">
+					<a class="btn span12" href="#" id="btnNewProblem"><i class="icon-random"></i> Create problem</a>
+				</div>
+				<div class="row-fluid">
+					<a class="btn span12" href="#" id="btnOptions"><i class="icon-cog"></i> Options</a>
+				</div>			
+				<div class="row-fluid">
+					<span id="state" class="label label-success span12">None</span>
+				</div>
+  			</div>
+	    	<div class="span9">	
+				<div class="row-fluid">		
+					<div class="span12"><h3>Problem</h3></div>
+    			</div>	
+		    	<div class="row-fluid">		    		
+					<div class="span12 box">
+						<div class="row-fluid">		
+							<div class="span12">
+								<div style="text-align:center">	
+									<div>
+										<div id="containerTarget" class="problemItemContainer">
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="row-fluid">		
+							<div class="span12">
+								<div style="text-align:center">				
+									<div>
+										<div id="containerValues" class="problemItemContainer">
+										</div>
+									</div>	
+								</div>					
+							</div>
+						</div>
+					</div>					
+					
+				</div>	
+				
+				<!-- Results --> 				
+				<div class="row-fluid">		
+					<div class="span12"><h3>Results</h3></div>
+    			</div>	
+				<div class="row-fluid">		
+					<div class="span12 box">
+						<div id="containerResults" class="resultsContainer"></div> 
+					</div>
+				</div>
+				
+				<!-- Statistic --> 				
+				<div class="row-fluid">
+					<span class="span12"><h3>Statistics</h3></span>		
+				</div>
+				<div class="row-fluid">		
+					<div class="span12 box">
+						<div id="containerStatistics"></div> 
+					</div>
+				</div>
+				
+				
+	    	</div>
+	  	</div>
+	  	
+	  	
+		<script type="text/template" id="templateTargetResult">
+			<div class='boxGeneric boxTarget'>
+				<% _.each(digits, function(digit) { %> 
+					<button class='btn btn-large' digit='<%= digit.pow %>'><%= digit.digit %></button>
+				<% }); %>
+			</div>
+		</script>	  	
+	  	
+		<script type="text/template" id="templateValues">
+			<% _.each(values, function(digit, index) { %> 
+				<button class='btn btn-large' valueIndex='<%= index %>'><%= digit %></button>
+			<% }); %>
+		</script>	  	
+
+		<script type="text/template" id="templateResults">
+			<% if ( results.length == 0 ) { %>
+			<div class="alert alert-info">
+ 				No result available yet.
+			</div>
+			<%	} else { %>
+			<div id='carousel' class='carousel slide'>
+				<div class='carousel-inner'>
+					<% _.each( results, function( result, index ){ %>
+						<div class='item'>
+							<div class='resultContainer'>
+								<div>Result # <%= index + 1 %>/<%= results.length %></div>
+								<% _.each( result.operations, function(operation) { %>
+									<div class="<% if (index == 1) { %> active <% } %>"><%= operation.operator1 %> <%= operation.operand.sym %> <%= operation.operator2 %> = <%= operation.result %> </div>
+								<% }); %>								
+							</div>
+						</div>
+					<% }); %>
+				</div>
+				<a class='carousel-control left' href='#carousel' data-slide='prev'>&lsaquo;</a>
+				<a class='carousel-control right' href='#carousel' data-slide='next'>&rsaquo;</a>				
+			</div>
+			<% } %>			
+		</script>	  	
+
+
+		<script type="text/template" id="templateStatistics">
+			<form class="form-horizontal">
+			<% _.each(stats, function(value, key) { %>
+				<div class="control-group">
+					<label class="control-label" for="<%= key %>"><%= key %></label>
+					<div class="controls">
+						<input type="text" id="<%= key %>" value="<%= value %>" disabled>
+					</div> 
+				</div>
+			<% }); %>
+			</form>
+		</script>	  	
+
+	  	
+	  	<!--
+		<div class="row-fluid">		
+			<div class="span12">				
+				<div class="navbar navbar-fixed-bottom">
+	  				<div class="navbar-inner">		
+						<h1>Bertrand</h1>
+					</div>
+
+				</div>				
+			</div>
+		</div>
+	  	-->
+	</div>	
+</body>
+</html>
